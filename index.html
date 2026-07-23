@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Absensi Haid Siswi - IPM SMAM 2</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: linear-gradient(135deg, #fce7f3 0%, #e0eafc 100%);
+      --text-judul: #831843;
+      --text-p: #475569;
+      --btn-grad: linear-gradient(90deg, #ec4899, #db2777);
+      
+      /* Variabel Liquid Glass Mode Terang */
+      --glass-bg: rgba(255, 255, 255, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.6);
+      --glass-shadow: 0 8px 32px 0 rgba(219, 39, 119, 0.12);
+      --glass-inner-glow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+      --blob-opacity: 0.55;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: linear-gradient(135deg, #0f172a 0%, #831843 100%);
+      --text-judul: #fbcfe8;
+      --text-p: #cbd5e1; 
+      --btn-grad: linear-gradient(90deg, #ec4899, #f43f5e);
+      
+      /* Variabel Liquid Glass Mode Gelap */
+      --glass-bg: rgba(15, 23, 42, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+      --glass-inner-glow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+      --blob-opacity: 0.3;
+    }
+
+    /* Modal Gelap & Kolom Input */
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95) !important; 
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+      text-align: center !important;
+    }
+    
+    [data-theme="dark"] .modal-content {
+      background: rgba(30, 41, 59, 0.95) !important; 
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .search-input {
+      background: #ffffff !important;
+      border: 1px solid #fbcfe8 !important;
+    }
+    
+    [data-theme="dark"] .search-input {
+      background: #0f172a !important;
+      border: 1px solid #334155 !important;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-body);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      transition: background 0.5s ease;
+      position: relative;
+    }
+
+    /* Blob Animasi Background */
+    .blob-wrapper {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1; overflow: hidden; filter: blur(30px);
+      will-change: transform; transform: translateZ(0);
+    }
+    .blob {
+      position: absolute; border-radius: 50%; opacity: var(--blob-opacity);
+      animation: move 20s infinite alternate ease-in-out;
+    }
+    .blob-pink { width: 45vw; height: 45vw; max-width: 500px; max-height: 500px; background: #ec4899; top: -10%; left: -10%; }
+    .blob-purple { width: 50vw; height: 50vw; max-width: 550px; max-height: 550px; background: #a855f7; bottom: -5%; right: -5%; animation-duration: 25s; }
+    .blob-rose { width: 35vw; height: 35vw; max-width: 400px; max-height: 400px; background: #f43f5e; top: 40%; left: 30%; animation-duration: 18s; }
+
+    @keyframes move {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20vw, 15vh) scale(1.1); }
+      100% { transform: translate(10vw, -5vh) scale(1); }
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed; top: 20px; right: 20px; cursor: pointer; z-index: 100;
+      background: var(--glass-bg); padding: 10px 18px; border-radius: 30px;
+      border: 1px solid var(--glass-border); 
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      display: flex; align-items: center; gap: 10px; font-size: 13px;
+      font-weight: 600; color: var(--text-judul); 
+      box-shadow: var(--glass-shadow); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .theme-toggle:hover { transform: scale(1.05); }
+    #theme-icon-container {
+      width: 20px; height: 20px; display: flex; align-items: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+    }
+    #theme-icon-container svg { width: 100%; height: 100%; fill: currentColor; }
+    .rotate-anim { transform: rotate(360deg); opacity: 0; }
+
+    /* Card Utama */
+    .app-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px) saturate(130%);
+      -webkit-backdrop-filter: blur(12px) saturate(130%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-inner-glow);
+      border-radius: 32px; padding: 40px 30px; 
+      width: 92%; max-width: 460px; text-align: center;
+      display: flex; flex-direction: column; z-index: 10;
+      max-height: 85vh; overflow-y: auto; scrollbar-width: none;
+      animation: fadeIn 0.6s ease-out;
+    }
+    .app-card::-webkit-scrollbar { display: none; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    .logo { display: flex; justify-content: center; margin-bottom: 20px; gap: 10px; }
+    .logo img { width: 110px; height: auto; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.15)); }
+
+    .judul { font-weight: 800; font-size: 26px; color: var(--text-judul); margin: 0 0 8px 0; line-height: 1.3; }
+    p.subtitle { font-size: 14px; color: var(--text-p); margin-bottom: 25px; line-height: 1.5; }
+
+    /* Tombol */
+    .btn-main {
+      width: 100%; padding: 15px; font-size: 15px; font-weight: 700;
+      border: none; border-radius: 50px; background: var(--btn-grad);
+      color: white; cursor: pointer; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3); margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4); }
+    .btn-main:active { transform: scale(0.96); }
+    .btn-main:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    
+    .btn-about { 
+      background: rgba(255, 255, 255, 0.1); border: 2px solid #ec4899; 
+      color: var(--text-judul); box-shadow: none; backdrop-filter: blur(5px);
+    }
+    .btn-about:hover { background: #ec4899; color: white; }
+    .btn-back { background: #64748b; font-size: 14px; box-shadow: 0 8px 20px rgba(100, 116, 139, 0.3); color: white; margin-top: 10px; }
+    .btn-back:hover { background: #475569; }
+
+    /* Search & Live Autocomplete */
+    .search-container { position: relative; margin-bottom: 18px; width: 100%; }
+    .search-input {
+      width: 100%; padding: 15px 20px; border-radius: 50px;
+      font-size: 14px; outline: none; font-family: inherit; color: var(--text-judul);
+      transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .search-input:focus { border-color: #ec4899 !important; box-shadow: 0 0 15px rgba(236, 72, 153, 0.3); }
+
+    .search-results {
+      position: absolute; top: 100%; left: 0; right: 0; background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid var(--glass-border);
+      max-height: 220px; overflow-y: auto; z-index: 50; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      margin-top: 8px; display: none; text-align: left;
+    }
+    [data-theme="dark"] .search-results { background: rgba(30, 41, 59, 0.95); }
+    .result-item {
+      padding: 12px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid rgba(128,128,128,0.1); font-size: 14px; font-weight: 600; color: var(--text-judul);
+    }
+    .result-item:hover { background: rgba(236, 72, 153, 0.15); }
+    .result-kelas { font-size: 11px; font-weight: 700; background: rgba(128,128,128,0.2); padding: 4px 10px; border-radius: 20px; }
+
+    /* List Antrean Siswi Terpilih */
+    .queue-container {
+      margin-bottom: 20px; display: none; text-align: left;
+    }
+    .queue-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px; padding: 0 5px;
+    }
+    .queue-title { font-size: 13px; font-weight: 700; color: var(--text-judul); }
+    .queue-count { font-size: 11px; font-weight: 700; background: #ec4899; color: white; padding: 2px 10px; border-radius: 20px; }
+    
+    .queue-list {
+      display: flex; flex-direction: column; gap: 8px;
+      max-height: 200px; overflow-y: auto; padding-right: 4px;
+    }
+    .queue-item {
+      background: rgba(236, 72, 153, 0.12); border: 1px solid rgba(236, 72, 153, 0.3);
+      padding: 10px 14px; border-radius: 16px; display: flex; justify-content: space-between;
+      align-items: center; animation: fadeIn 0.3s ease;
+    }
+    .queue-info { display: flex; flex-direction: column; }
+    .queue-name { font-size: 13px; font-weight: 700; color: var(--text-judul); }
+    .queue-class { font-size: 11px; color: var(--text-p); font-weight: 600; }
+    .btn-remove {
+      background: none; border: none; color: #ef4444; cursor: pointer;
+      font-size: 18px; font-weight: 700; padding: 2px 8px; border-radius: 8px;
+      transition: 0.2s;
+    }
+    .btn-remove:hover { background: rgba(239, 68, 68, 0.2); }
+
+    /* Modal Sistem */
+    .modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+      z-index: 200; justify-content: center; align-items: center; padding: 20px;
+    }
+    .special-icon {
+      width: 75px; height: 75px; background: linear-gradient(135deg, #ec4899, #f43f5e);
+      border-radius: 24px; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; color: white; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatIcon { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+
+    .gradient-text {
+      font-size: 24px; font-weight: 800; margin: 0 0 10px 0;
+      background: linear-gradient(to right, #ec4899, #f43f5e);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;
+      text-align: center;
+    }
+    [data-theme="dark"] .gradient-text { background: linear-gradient(to right, #ffffff, #fbcfe8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .modal-desc { 
+      color: var(--text-p); 
+      font-size: 15px; 
+      line-height: 1.6; 
+      margin-bottom: 25px; 
+      padding: 0 10px; 
+      font-weight: 500; 
+      text-align: center; 
+    }
+
+    /* Grid Statistik Modal Tentang */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+    .stat-box {
+      background: rgba(128, 128, 128, 0.1); border: 1px solid rgba(128, 128, 128, 0.2);
+      border-radius: 18px; padding: 15px; text-align: center; transition: 0.3s;
+    }
+    .stat-box:hover { background: rgba(128, 128, 128, 0.15); transform: translateY(-2px); }
+    .stat-box.full-width { grid-column: span 2; }
+    .stat-label { font-size: 12px; color: var(--text-p); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-weight: 600; text-align: center; }
+    .stat-value { font-size: 15px; color: var(--text-judul); font-weight: 700; text-align: center; }
+    .stat-value strong { color: #ec4899; }
+
+    .btn-close-special {
+      background: linear-gradient(90deg, #ec4899, #db2777); width: 100%; border-radius: 50px; padding: 15px;
+      font-size: 15px; color: white; font-weight: 700; border: none; cursor: pointer; transition: 0.3s;
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+    }
+    .btn-close-special:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4); }
+    .btn-close-special:active { transform: scale(0.96); }
+
+    /* Spinner Loading */
+    .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+      border-top-color: currentColor; animation: spin 0.8s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .wm { position: fixed; bottom: 15px; font-size: 11px; font-weight: 600; color: var(--text-p); letter-spacing: 1px; z-index: 5; opacity: 0.8; }
+
+    @media (max-width: 480px) {
+      .app-card, .modal-content { padding: 30px 20px; border-radius: 28px; }
+      .judul { font-size: 24px; }
+      .logo img { width: 100px; }
+      .btn-main { padding: 13px; font-size: 14px; }
+      .theme-toggle { padding: 8px 15px; font-size: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Blob Animasi -->
+  <div class="blob-wrapper">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-rose"></div>
+  </div>
+
+  <!-- Theme Toggle -->
+  <div class="theme-toggle" onclick="toggleTheme()">
+    <span id="theme-text">Mode Terang</span>
+    <div id="theme-icon-container"></div>
+  </div>
+
+  <!-- ================= 1. HOME VIEW ================= -->
+  <div id="view-home" class="app-card">
+    <div class="logo">
+      <img src="logo-ipm.png" alt="IPM">
+      <img src="logo-sekolah.png" alt="SMAM">
+    </div>
+    <h1 class="judul">Absensi Haid <br>IPM SMAM 2 Beji</h1>
+    <p class="subtitle">Website Pendataan Khusus Siswi Berhalangan Sholat</p>
+
+    <button class="btn-main" onclick="switchView('view-form')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+      Mulai Absensi Haid
+    </button>
+    
+    <button class="btn-main btn-about" onclick="switchView('view-recap')">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+      Lihat Data Rekap
+    </button>
+
+    <button class="btn-main btn-about" onclick="toggleModalTentang(true)" style="border-color: transparent; background: transparent; margin-bottom: 0;">
+      Tentang Website
+    </button>
+  </div>
+
+  <!-- ================= 2. FORM ABSEN VIEW ================= -->
+  <div id="view-form" class="app-card" style="display: none;">
+    <h2 class="judul">Form Input Haid</h2>
+    <p class="subtitle">Cari dan pilih siswi untuk dimasukkan ke antrean absensi hari ini.</p>
+
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari Nama Siswi / Kelas..." autocomplete="off">
+      <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <!-- Antrean Siswi Terpilih -->
+    <div id="queueContainer" class="queue-container">
+      <div class="queue-header">
+        <span class="queue-title">Daftar Antrean Siswi</span>
+        <span id="queueCount" class="queue-count">0 Siswi</span>
+      </div>
+      <div id="queueList" class="queue-list"></div>
+    </div>
+
+    <button id="btnSubmit" class="btn-main" onclick="kirimDataHaid()" disabled>
+      Simpan Data Kehadiran
+    </button>
+    
+    <button class="btn-main btn-back" onclick="switchView('view-home')">Kembali ke Menu</button>
+  </div>
+
+  <!-- ================= 3. RECAP VIEW (PLACEHOLDER) ================= -->
+  <div id="view-recap" class="app-card" style="display: none;">
+    <div class="special-icon" style="background: linear-gradient(135deg, #a855f7, #6366f1);">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"></path></svg>
+    </div>
+    <h3 class="gradient-text" style="background: linear-gradient(to right, #a855f7, #6366f1); -webkit-background-clip: text;">Rekapitulasi Data</h3>
+    <p class="modal-desc">Fitur rekap otomatis terintegrasi dari Spreadsheet 2 sedang dikembangkan.</p>
+    <button class="btn-main btn-back" onclick="switchView('view-home')">Kembali ke Menu</button>
+  </div>
+
+  <!-- ================= MODAL TENTANG ================= -->
+  <div id="modalTentang" class="modal">
+    <div class="modal-content">
+      <div class="special-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      </div>
+      <h3 class="gradient-text">Tentang Website</h3>
+      <p class="modal-desc">
+        Platform digital resmi <strong>IPM</strong> untuk mempermudah pendataan dan monitoring pembelajaran ibadah siswa/siswi<br>SMA Muhammadiyah 2 Depok
+      </p>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">Project</div>
+          <div class="stat-value">KDI 26-27</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Version</div>
+          <div class="stat-value">v1.0.3</div>
+        </div>
+        <div class="stat-box full-width">
+          <div class="stat-label">Developed by</div>
+          <div class="stat-value"><strong>Razuhfgkruay</strong></div>
+        </div>
+      </div>
+      <button onclick="toggleModalTentang(false)" class="btn-close-special">Tutup</button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL SUKSES ================= -->
+  <div id="modalSukses" class="modal">
+    <div class="modal-content" style="max-width: 380px;">
+      <div class="special-icon" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); animation: none;">
+        <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <h3 class="gradient-text" style="background: linear-gradient(to right, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Berhasil Dikirim!</h3>
+      <p class="modal-desc" id="suksesDetailPesan">Data absensi haid berhasil disimpan.</p>
+      <button class="btn-close-special" style="background: linear-gradient(90deg, #10b981, #059669);" onclick="tutupModalSukses()">Selesai</button>
+    </div>
+  </div>
+
+  <div class="wm">SUPPORT BY RAZUHFGKRUAY</div>
+
+  <script>
+    const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 111.41 1.41L6.05 7.34a1 1 0 01-1.41-1.41l1.35-1.35zm12.02 12.02a1 1 0 111.41 1.41l-1.35 1.35a1 1 0 11-1.41-1.41l1.35 1.35zM5.99 19.42a1 1 0 101.41-1.41l-1.35-1.35a1 1 0 10-1.41 1.41l1.35 1.35zm12.02-12.02a1 1 0 101.41-1.41l-1.35-1.35a1 1 0 10-1.41 1.41l1.35 1.35z"/></svg>`;
+    const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>`;
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbyfREcw0vg7hOQ_a96CYk5bqJxFxYqbs0ziEnqZoFfQ3-Gi04BQi3G1g04uFZ_9-pXpEw/exec";
+    
+    let masterDataSiswa = [];
+    let antreanSiswi = []; // Array untuk menampung banyak siswi
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme_haid') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.getElementById("theme-text").innerText = savedTheme === 'dark' ? "Mode Gelap" : "Mode Terang";
+      document.getElementById("theme-icon-container").innerHTML = savedTheme === 'dark' ? moonIcon : sunIcon;
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const text = document.getElementById("theme-text");
+      const iconWrap = document.getElementById("theme-icon-container");
+      
+      iconWrap.classList.add("rotate-anim");
+      
+      setTimeout(() => {
+        const isDark = root.getAttribute("data-theme") === "dark";
+        const newTheme = isDark ? "light" : "dark";
+        
+        root.setAttribute("data-theme", newTheme);
+        localStorage.setItem('theme_haid', newTheme);
+        
+        text.innerText = isDark ? "Mode Terang" : "Mode Gelap";
+        iconWrap.innerHTML = isDark ? sunIcon : moonIcon;
+        iconWrap.classList.remove("rotate-anim");
+      }, 300);
+    }
+
+    function switchView(viewId) {
+      document.getElementById("view-home").style.display = "none";
+      document.getElementById("view-form").style.display = "none";
+      document.getElementById("view-recap").style.display = "none";
+
+      document.getElementById(viewId).style.display = "flex";
+      if(viewId === 'view-home') resetForm();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => { masterDataSiswa = data; })
+        .catch(err => { console.log("Gagal load data API:", err); });
+
+      document.querySelectorAll('.modal').forEach(m => {
+        m.addEventListener('click', function(e) {
+          if(e.target === this) this.style.display = 'none';
+        });
+      });
+    });
+
+    // Live Search
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      searchResults.innerHTML = '';
+
+      if (query.length < 2) {
+        searchResults.style.display = 'none';
+        return;
+      }
+
+      const filtered = masterDataSiswa.filter(item => 
+        item.nama.toLowerCase().includes(query) || item.kelas.toLowerCase().includes(query)
+      ).slice(0, 8);
+
+      if (filtered.length > 0) {
+        filtered.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'result-item';
+          div.innerHTML = `<span>${item.nama}</span><span class="result-kelas">${item.kelas}</span>`;
+          div.onclick = () => tambahKeAntrean(item);
+          searchResults.appendChild(div);
+        });
+        searchResults.style.display = 'block';
+      } else {
+        searchResults.style.display = 'none';
+      }
+    });
+
+    // Tambah Siswi ke Antrean
+    function tambahKeAntrean(item) {
+      // Cek apakah sudah ada di antrean
+      const ada = antreanSiswi.some(s => s.nama === item.nama && s.kelas === item.kelas);
+      if (ada) {
+        alert(`${item.nama} (${item.kelas}) sudah ada di dalam antrean!`);
+      } else {
+        antreanSiswi.push(item);
+        renderAntrean();
+      }
+
+      searchInput.value = '';
+      searchResults.style.display = 'none';
+      searchInput.focus();
+    }
+
+    // Hapus dari Antrean
+    function hapusDariAntrean(index) {
+      antreanSiswi.splice(index, 1);
+      renderAntrean();
+    }
+
+    // Render Tampilan List Antrean
+    function renderAntrean() {
+      const container = document.getElementById("queueContainer");
+      const listEl = document.getElementById("queueList");
+      const countEl = document.getElementById("queueCount");
+      const btnSubmit = document.getElementById("btnSubmit");
+
+      listEl.innerHTML = '';
+
+      if (antreanSiswi.length > 0) {
+        container.style.display = 'block';
+        countEl.innerText = `${antreanSiswi.length} Siswi`;
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = `Simpan ${antreanSiswi.length} Data Kehadiran`;
+
+        antreanSiswi.forEach((item, index) => {
+          const div = document.createElement('div');
+          div.className = 'queue-item';
+          div.innerHTML = `
+            <div class="queue-info">
+              <span class="queue-name">${item.nama}</span>
+              <span class="queue-class">Kelas ${item.kelas}</span>
+            </div>
+            <button class="btn-remove" onclick="hapusDariAntrean(${index})" title="Hapus">✕</button>
+          `;
+          listEl.appendChild(div);
+        });
+      } else {
+        container.style.display = 'none';
+        btnSubmit.disabled = true;
+        btnSubmit.innerText = 'Simpan Data Kehadiran';
+      }
+    }
+
+    // Kirim Semua Data Antrean
+    function kirimDataHaid() {
+      if (antreanSiswi.length === 0) return;
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Menyimpan...';
+
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ data: antreanSiswi })
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success' || res.success) {
+          document.getElementById("suksesDetailPesan").innerHTML = `Sebanyak <strong>${antreanSiswi.length} data siswi</strong> berhasil dicatat ke Spreadsheet!`;
+          document.getElementById("modalSukses").style.display = "flex";
+          resetForm();
+        } else {
+          alert('Gagal: ' + (res.message || res.error));
+          btn.disabled = false;
+          renderAntrean();
+        }
+      })
+      .catch(err => {
+        alert('Terjadi kesalahan koneksi jaringan: ' + err);
+        btn.disabled = false;
+        renderAntrean();
+      });
+    }
+
+    function resetForm() {
+      antreanSiswi = [];
+      document.getElementById('searchInput').value = '';
+      renderAntrean();
+    }
+
+    function tutupModalSukses() {
+      document.getElementById("modalSukses").style.display = "none";
+      switchView('view-home');
+    }
+
+    function toggleModalTentang(show) {
+      document.getElementById("modalTentang").style.display = show ? "flex" : "none";
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW terdaftar:', reg.scope))
+          .catch(err => console.error('Gagal SW:', err));
+      });
+    }
+  </script>
+</body>
+</html>
