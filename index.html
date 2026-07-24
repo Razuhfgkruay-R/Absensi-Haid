@@ -512,7 +512,7 @@
         <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
       </div>
       <h3 class="gradient-text" style="background: linear-gradient(to right, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Batalkan Absensi?</h3>
-      <p class="modal-desc" style="margin-bottom: 20px;">Masih ada data siswi di antrean yang belum dikirim. Yakin ingin keluar?</p>
+      <p class="modal-desc" style="margin-bottom: 20px;">Masih ada data siswi di list yang belum dikirim. Yakin ingin keluar?</p>
       <div style="display: flex; gap: 10px;">
         <button class="btn-main btn-back" style="margin-top:0; flex:1;" onclick="tutupModalKonfirmasi()">Lanjut Input</button>
         <button class="btn-close-special" style="background: linear-gradient(90deg, #ef4444, #dc2626); flex:1;" onclick="konfirmasiKeluarForm()">Ya, Keluar</button>
@@ -692,57 +692,48 @@
     }
 
     function renderRekapDashboard(data) {
-    function renderRekapDashboard(data) {
-  const container = document.getElementById("rekapList");
-  const statToday = document.getElementById("statToday");
-  const statTotal = document.getElementById("statTotal");
+      const container = document.getElementById("rekapList");
+      const statToday = document.getElementById("statToday");
+      const statTotal = document.getElementById("statTotal");
 
-  // Tanggal hari ini YYYY-MM-DD
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const dd = String(today.getDate()).padStart(2, '0');
-  const todayStr = `${yyyy}-${mm}-${dd}`;
+      // Menghitung tanggal hari ini secara lokal
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const todayStr = `${yyyy}-${mm}-${dd}`;
 
-  // Hitung haid hari ini
-  const countToday = rawRekapData.filter(d => (d.tanggal || "").toString().includes(todayStr)).length;
+      const countToday = rawRekapData.filter(d => (d.tanggal || "").toString().startsWith(todayStr)).length;
 
-  statToday.innerText = countToday;
-  statTotal.innerText = rawRekapData.length;
+      statToday.innerText = countToday;
+      statTotal.innerText = rawRekapData.length;
 
-  container.innerHTML = '';
+      container.innerHTML = '';
 
-  if (data.length === 0) {
-    container.innerHTML = '<div style="text-align: center; color: var(--text-p); font-size: 13px; padding: 20px;">Belum ada data rekap yang sesuai.</div>';
-    return;
-  }
+      if (data.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-p); font-size: 13px; padding: 20px;">Belum ada data rekap yang sesuai.</div>';
+        return;
+      }
 
-  data.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "rekap-card";
-    
-    const validasiStatus = (item.validasi || "Valid").toString();
-    const isBentrok = validasiStatus.toLowerCase() === "bentrok";
-    const badgeClass = isBentrok ? "badge-bentrok" : "badge-valid";
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "rekap-card";
+        
+        // Pengecekan aman untuk nilai validasi
+        const validasiStatus = (item.validasi || "Valid").toString();
+        const isBentrok = validasiStatus.toLowerCase() === "bentrok";
+        const badgeClass = isBentrok ? "badge-bentrok" : "badge-valid";
 
-    // Format tanggal cantik
-    let tglTampil = item.tanggal || "-";
-    if (tglTampil.length === 10 && tglTampil.includes("-")) {
-      const p = tglTampil.split("-");
-      tglTampil = `${p[2]}/${p[1]}/${p[0]}`; // Hasil: DD/MM/YYYY
+        div.innerHTML = `
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 13px; font-weight: 700; color: var(--text-judul);">${item.nama || "-"}</span>
+            <span style="font-size: 11px; color: var(--text-p); font-weight: 600;">Kelas ${item.kelas || "-"} • ${item.tanggal || "-"}</span>
+          </div>
+          <span class="rekap-badge ${badgeClass}">${validasiStatus}</span>
+        `;
+        container.appendChild(div);
+      });
     }
-
-    div.innerHTML = `
-      <div style="display: flex; flex-direction: column;">
-        <span style="font-size: 13px; font-weight: 700; color: var(--text-judul);">${item.nama || "-"}</span>
-        <span style="font-size: 11px; color: var(--text-p); font-weight: 600;">Kelas ${item.kelas || "-"} • ${tglTampil}</span>
-      </div>
-      <span class="rekap-badge ${badgeClass}">${validasiStatus}</span>
-    `;
-    container.appendChild(div);
-  });
-}
-
 
     function filterDataRekap() {
       const searchVal = (document.getElementById("searchRekapNama").value || "").toLowerCase().trim();
@@ -809,7 +800,7 @@
     function tambahKeAntrean(item) {
       const ada = antreanSiswi.some(s => s.nama === item.nama && s.kelas === item.kelas);
       if (ada) {
-        alert(`${item.nama} (${item.kelas}) sudah ada di dalam antrean!`);
+        alert(`${item.nama} (${item.kelas}) sudah ada di dalam list!`);
       } else {
         antreanSiswi.push(item);
         renderAntrean();
@@ -854,7 +845,7 @@
       } else {
         container.style.display = 'none';
         btnSubmit.disabled = true;
-        btnSubmit.innerText = 'Simpan Data Kehadiran';
+        btnSubmit.innerText = 'Kirim Data';
       }
     }
 
@@ -862,7 +853,7 @@
       if (antreanSiswi.length === 0) return;
       const btn = document.getElementById('btnSubmit');
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span> Menyimpan...';
+      btn.innerHTML = '<span class="spinner"></span> Mengirim...';
 
       fetch(API_URL, {
         method: 'POST',
