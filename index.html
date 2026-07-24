@@ -45,6 +45,8 @@
       background: rgba(255, 255, 255, 0.95) !important; 
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
       text-align: center !important;
+      border-radius: 28px !important;
+      padding: 25px 20px !important;
     }
     
     [data-theme="dark"] .modal-content {
@@ -60,6 +62,68 @@
     [data-theme="dark"] .search-input {
       background: #0f172a !important;
       border: 1px solid #334155 !important;
+      color: #fbcfe8 !important;
+    }
+
+    /* Custom Glass Selector Trigger Button */
+    .custom-select-trigger {
+      background: #ffffff;
+      border: 1px solid #fbcfe8;
+      border-radius: 50px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-judul);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      user-select: none;
+    }
+
+    [data-theme="dark"] .custom-select-trigger {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #fbcfe8;
+    }
+
+    .custom-select-trigger:active {
+      transform: scale(0.97);
+    }
+
+    /* Option Items inside Glass Modal */
+    .kelas-option-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+      margin-top: 15px;
+      padding-right: 4px;
+    }
+
+    .kelas-option-item {
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: rgba(236, 72, 153, 0.08);
+      border: 1px solid rgba(236, 72, 153, 0.2);
+      color: var(--text-judul);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.2s;
+    }
+
+    .kelas-option-item:hover, .kelas-option-item.active {
+      background: #ec4899;
+      color: white;
+      border-color: #ec4899;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -88,7 +152,7 @@
       animation: move 20s infinite alternate ease-in-out;
     }
     .blob-pink { width: 45vw; height: 45vw; max-width: 500px; max-height: 500px; background: #ec4899; top: -10%; left: -10%; }
-    .blob-purple { width: 50vw; height: 50vw; max-width: 550px; max-height: 550px; background: #a855f7; bottom: -5%; right: -5%; animation-duration: 25s; }
+    .blob-purple { width: 50vw; height: 50vw; max-width: 550px; max-height: 550px; background: #db2777; bottom: -5%; right: -5%; animation-duration: 25s; }
     .blob-rose { width: 35vw; height: 35vw; max-width: 400px; max-height: 400px; background: #f43f5e; top: 40%; left: 30%; animation-duration: 18s; }
 
     @keyframes move {
@@ -126,7 +190,7 @@
       border-radius: 32px; padding: 40px 30px; 
       width: 92%; max-width: 460px; text-align: center;
       display: flex; flex-direction: column; z-index: 10;
-      max-height: 85vh; overflow-y: auto; scrollbar-width: none;
+      max-height: 88vh; overflow-y: auto; scrollbar-width: none;
       animation: fadeIn 0.6s ease-out;
     }
     .app-card::-webkit-scrollbar { display: none; }
@@ -161,7 +225,7 @@
     /* Search & Live Autocomplete */
     .search-container { position: relative; margin-bottom: 18px; width: 100%; }
     .search-input {
-      width: 100%; padding: 15px 20px; border-radius: 50px;
+      width: 100%; padding: 14px 20px; border-radius: 50px;
       font-size: 14px; outline: none; font-family: inherit; color: var(--text-judul);
       transition: 0.3s; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
     }
@@ -182,20 +246,12 @@
     .result-kelas { font-size: 11px; font-weight: 700; background: rgba(128,128,128,0.2); padding: 4px 10px; border-radius: 20px; }
 
     /* List Antrean Siswi Terpilih */
-    .queue-container {
-      margin-bottom: 20px; display: none; text-align: left;
-    }
-    .queue-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 10px; padding: 0 5px;
-    }
+    .queue-container { margin-bottom: 20px; display: none; text-align: left; }
+    .queue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px; }
     .queue-title { font-size: 13px; font-weight: 700; color: var(--text-judul); }
     .queue-count { font-size: 11px; font-weight: 700; background: #ec4899; color: white; padding: 2px 10px; border-radius: 20px; }
     
-    .queue-list {
-      display: flex; flex-direction: column; gap: 8px;
-      max-height: 200px; overflow-y: auto; padding-right: 4px;
-    }
+    .queue-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; padding-right: 4px; }
     .queue-item {
       background: rgba(236, 72, 153, 0.12); border: 1px solid rgba(236, 72, 153, 0.3);
       padding: 10px 14px; border-radius: 16px; display: flex; justify-content: space-between;
@@ -204,11 +260,7 @@
     .queue-info { display: flex; flex-direction: column; }
     .queue-name { font-size: 13px; font-weight: 700; color: var(--text-judul); }
     .queue-class { font-size: 11px; color: var(--text-p); font-weight: 600; }
-    .btn-remove {
-      background: none; border: none; color: #ef4444; cursor: pointer;
-      font-size: 18px; font-weight: 700; padding: 2px 8px; border-radius: 8px;
-      transition: 0.2s;
-    }
+    .btn-remove { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 18px; font-weight: 700; padding: 2px 8px; border-radius: 8px; transition: 0.2s; }
     .btn-remove:hover { background: rgba(239, 68, 68, 0.2); }
 
     /* Modal Sistem */
@@ -233,27 +285,34 @@
     }
     [data-theme="dark"] .gradient-text { background: linear-gradient(to right, #ffffff, #fbcfe8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .modal-desc { 
-      color: var(--text-p); 
-      font-size: 15px; 
-      line-height: 1.6; 
-      margin-bottom: 25px; 
-      padding: 0 10px; 
-      font-weight: 500; 
-      text-align: center; 
-    }
+    .modal-desc { color: var(--text-p); font-size: 15px; line-height: 1.6; margin-bottom: 25px; padding: 0 10px; font-weight: 500; text-align: center; }
 
-    /* Grid Statistik Modal Tentang */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+    /* Grid Statistik Modal Tentang & Rekap */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
     .stat-box {
       background: rgba(128, 128, 128, 0.1); border: 1px solid rgba(128, 128, 128, 0.2);
-      border-radius: 18px; padding: 15px; text-align: center; transition: 0.3s;
+      border-radius: 18px; padding: 12px; text-align: center; transition: 0.3s;
     }
     .stat-box:hover { background: rgba(128, 128, 128, 0.15); transform: translateY(-2px); }
     .stat-box.full-width { grid-column: span 2; }
-    .stat-label { font-size: 12px; color: var(--text-p); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-weight: 600; text-align: center; }
-    .stat-value { font-size: 15px; color: var(--text-judul); font-weight: 700; text-align: center; }
-    .stat-value strong { color: #ec4899; }
+    .stat-label { font-size: 11px; color: var(--text-p); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; font-weight: 600; text-align: center; }
+    .stat-value { font-size: 18px; color: var(--text-judul); font-weight: 800; text-align: center; }
+
+    /* Styles Khusus Rekap Dashboard */
+    .rekap-filters { display: flex; gap: 8px; margin-bottom: 15px; }
+    .rekap-list-container {
+      display: flex; flex-direction: column; gap: 8px; max-height: 240px;
+      overflow-y: auto; text-align: left; padding-right: 4px; margin-bottom: 15px;
+    }
+    .rekap-card {
+      background: rgba(236, 72, 153, 0.08); border: 1px solid rgba(236, 72, 153, 0.25);
+      padding: 10px 14px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .rekap-badge {
+      font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
+    }
+    .badge-valid { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .badge-bentrok { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
     .btn-close-special {
       background: linear-gradient(90deg, #ec4899, #db2777); width: 100%; border-radius: 50px; padding: 15px;
@@ -263,7 +322,6 @@
     .btn-close-special:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4); }
     .btn-close-special:active { transform: scale(0.96); }
 
-    /* Spinner Loading */
     .spinner {
       display: inline-block; width: 18px; height: 18px;
       border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
@@ -312,7 +370,7 @@
       Mulai Absensi Haid
     </button>
     
-    <button class="btn-main btn-about" onclick="switchView('view-recap')">
+    <button class="btn-main btn-about" onclick="bukaModalPasswordRekap()">
       <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
       Lihat Data Rekap
     </button>
@@ -325,7 +383,7 @@
   <!-- ================= 2. FORM ABSEN VIEW ================= -->
   <div id="view-form" class="app-card" style="display: none;">
     <h2 class="judul">SELAMAT BERTUGAS</h2>
-    <p class="subtitle">Cari dan pilih siswi untuk dimasukkan ke antrean absensi hari ini.</p>
+    <p class="subtitle">Cari dan pilih siswi untuk dimasukkan ke antrean absensi haid hari ini.</p>
 
     <div class="search-container">
       <input type="text" id="searchInput" class="search-input" placeholder="Cari Nama Siswi / Kelas..." autocomplete="off">
@@ -342,20 +400,69 @@
     </div>
 
     <button id="btnSubmit" class="btn-main" onclick="kirimDataHaid()" disabled>
-      Simpan Data Kehadiran
+      Kirim Data
     </button>
     
+    <button class="btn-main btn-back" onclick="kembaliDariForm()">Kembali ke Menu</button>
+  </div>
+
+  <!-- ================= 3. RECAP DASHBOARD VIEW ================= -->
+  <div id="view-recap" class="app-card" style="display: none;">
+    <div class="special-icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e); margin-bottom: 12px; width: 60px; height: 60px; box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"></path></svg>
+    </div>
+    <h3 class="gradient-text" style="background: linear-gradient(to right, #ec4899, #f43f5e); -webkit-background-clip: text; margin-bottom: 15px; font-size: 22px;">Dashboard Rekap</h3>
+
+    <!-- Summary Cards -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">Haid Hari Ini</div>
+        <div class="stat-value" id="statToday" style="color: #ec4899;">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Total Record</div>
+        <div class="stat-value" id="statTotal" style="color: #db2777;">0</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="rekap-filters">
+      <!-- Custom Glass Selector -->
+      <div class="custom-select-trigger" id="kelasSelectBtn" onclick="bukaModalPilihKelas()" style="flex: 1;">
+        <span id="selectedKelasText">Semua Kelas</span>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+      </div>
+      <input type="text" id="searchRekapNama" class="search-input" placeholder="Cari Siswi..." oninput="filterDataRekap()" style="flex: 1.2;">
+    </div>
+
+    <!-- Data List -->
+    <div id="rekapList" class="rekap-list-container">
+      <div style="text-align: center; color: var(--text-p); font-size: 13px; padding: 20px;">
+        <span class="spinner" style="border-top-color: #ec4899;"></span> Memuat data...
+      </div>
+    </div>
+
+    <!-- Link Direct Google Sheets -->
+    <button class="btn-main btn-about" onclick="bukaGoogleSheetsFull()" style="border-color: #ec4899; color: var(--text-judul); font-size: 13px; padding: 12px;">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+      Buka Laporan Full Spreadsheet
+    </button>
+
     <button class="btn-main btn-back" onclick="switchView('view-home')">Kembali ke Menu</button>
   </div>
 
-  <!-- ================= 3. RECAP VIEW (PLACEHOLDER) ================= -->
-  <div id="view-recap" class="app-card" style="display: none;">
-    <div class="special-icon" style="background: linear-gradient(135deg, #a855f7, #6366f1);">
-      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"></path></svg>
+  <!-- ================= MODAL PILIH KELAS (CUSTOM GLASS PICKER) ================= -->
+  <div id="modalPilihKelas" class="modal">
+    <div class="modal-content" style="max-width: 380px;">
+      <h3 class="gradient-text" style="font-size: 20px; margin-bottom: 5px;">Pilih Filter Kelas</h3>
+      <p class="modal-desc" style="font-size: 13px; margin-bottom: 10px;">Tampilkan rekap data siswi berdasarkan kelas.</p>
+      
+      <div id="kelasOptionContainer" class="kelas-option-list">
+        <!-- Pilihan kelas di-generate via JS -->
+      </div>
+      
+      <button onclick="tutupModalPilihKelas()" class="btn-main btn-back" style="margin-top: 15px;">Tutup</button>
     </div>
-    <h3 class="gradient-text" style="background: linear-gradient(to right, #a855f7, #6366f1); -webkit-background-clip: text;">Rekapitulasi Data</h3>
-    <p class="modal-desc">Fitur rekap masih di kembangin loh yaaa</p>
-    <button class="btn-main btn-back" onclick="switchView('view-home')">Kembali ke Menu</button>
   </div>
 
   <!-- ================= MODAL TENTANG ================= -->
@@ -375,11 +482,11 @@
         </div>
         <div class="stat-box">
           <div class="stat-label">Version</div>
-          <div class="stat-value">v1.0.3</div>
+          <div class="stat-value">v1.0</div>
         </div>
         <div class="stat-box full-width">
           <div class="stat-label">Developed by</div>
-          <div class="stat-value"><strong>Razuhfgkruay</strong></div>
+          <div class="stat-value"><strong style="color: #ec4899;">Razuhfgkruay</strong></div>
         </div>
       </div>
       <button onclick="toggleModalTentang(false)" class="btn-close-special">Tutup</button>
@@ -393,8 +500,43 @@
         <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
       </div>
       <h3 class="gradient-text" style="background: linear-gradient(to right, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Berhasil Dikirim!</h3>
-      <p class="modal-desc" id="suksesDetailPesan">Data absensi haid berhasil disimpan.</p>
+      <p class="modal-desc" id="suksesDetailPesan">Data absensi haid berhasil dikirim.</p>
       <button class="btn-close-special" style="background: linear-gradient(90deg, #10b981, #059669);" onclick="tutupModalSukses()">Selesai</button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL KONFIRMASI BATAL ================= -->
+  <div id="modalKonfirmasiBatal" class="modal">
+    <div class="modal-content" style="max-width: 380px;">
+      <div class="special-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3); animation: none;">
+        <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      </div>
+      <h3 class="gradient-text" style="background: linear-gradient(to right, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Batalkan Absensi?</h3>
+      <p class="modal-desc" style="margin-bottom: 20px;">Masih ada data siswi di antrean yang belum dikirim. Yakin ingin keluar?</p>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-main btn-back" style="margin-top:0; flex:1;" onclick="tutupModalKonfirmasi()">Lanjut Input</button>
+        <button class="btn-close-special" style="background: linear-gradient(90deg, #ef4444, #dc2626); flex:1;" onclick="konfirmasiKeluarForm()">Ya, Keluar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL PASSWORD REKAP ================= -->
+  <div id="modalPasswordRekap" class="modal">
+    <div class="modal-content" style="max-width: 380px;">
+      <div class="special-icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e); box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3); animation: none;">
+        <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
+      </div>
+      <h3 class="gradient-text" style="background: linear-gradient(to right, #ec4899, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Akses Rekap Data</h3>
+      <p class="modal-desc" style="margin-bottom: 15px;">Masukkan password untuk melihat data rekapitulasi.</p>
+      
+      <form onsubmit="verifikasiPasswordRekap(event)">
+        <input type="password" id="passwordRekapInput" class="search-input" placeholder="Masukkan password..." style="text-align: center; margin-bottom: 10px;" autocomplete="off">
+        <p id="errorPasswordText" style="color: #ef4444; font-size: 12px; font-weight: 600; margin: 0 0 15px 0; display: none;">Password salah! Silakan coba lagi.</p>
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn-main btn-back" style="margin-top:0; flex:1;" onclick="tutupModalPasswordRekap()">Batal</button>
+          <button type="submit" class="btn-close-special" style="background: linear-gradient(90deg, #ec4899, #db2777); flex:1;">Masuk</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -404,10 +546,13 @@
     const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 100 10 5 5 0 000-10zM2 13h2a1 1 0 100-2H2a1 1 0 100 2zm18 0h2a1 1 0 100-2h-2a1 1 0 100 2zM11 2v2a1 1 0 102 0V2a1 1 0 10-2 0zm0 18v2a1 1 0 102 0v-2a1 1 0 10-2 0zM5.99 4.58a1 1 0 111.41 1.41L6.05 7.34a1 1 0 01-1.41-1.41l1.35-1.35zm12.02 12.02a1 1 0 111.41 1.41l-1.35 1.35a1 1 0 11-1.41-1.41l1.35 1.35zM5.99 19.42a1 1 0 101.41-1.41l-1.35-1.35a1 1 0 10-1.41 1.41l1.35 1.35zm12.02-12.02a1 1 0 101.41-1.41l-1.35-1.35a1 1 0 10-1.41 1.41l1.35 1.35z"/></svg>`;
     const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>`;
 
-    const API_URL = "https://script.google.com/macros/s/AKfycby2Ip0bt9fhqbeAEGMMUvcsh1bl22HilgN6M0toXfCJhAzgc2bu2Ernn0W_GUR6LHBm4g/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwQ5azDAI4tbIIVFAQ22rD9n_Y8ZpUnvOBlHEKPyqTi21hn12bxRwphXRS6_uZTMvTtFw/exec";
+    const SPREADSHEET_FULL_URL = "https://docs.google.com/spreadsheets/d/1nDu_wrmuT9lStA8MGjRnUcg8laPr5qizPK1o0bd_CQo";
     
     let masterDataSiswa = [];
-    let antreanSiswi = []; // Array untuk menampung banyak siswi
+    let antreanSiswi = [];
+    let rawRekapData = [];
+    let selectedKelasFilter = "";
 
     function initTheme() {
       const savedTheme = localStorage.getItem('theme_haid') || 'light';
@@ -443,6 +588,167 @@
 
       document.getElementById(viewId).style.display = "flex";
       if(viewId === 'view-home') resetForm();
+      if(viewId === 'view-recap') loadDataRekap();
+    }
+
+    // ================= FITUR KONFIRMASI KELUAR =================
+    function kembaliDariForm() {
+      if (antreanSiswi.length > 0) {
+        document.getElementById("modalKonfirmasiBatal").style.display = "flex";
+      } else {
+        switchView('view-home');
+      }
+    }
+
+    function tutupModalKonfirmasi() {
+      document.getElementById("modalKonfirmasiBatal").style.display = "none";
+    }
+
+    function konfirmasiKeluarForm() {
+      tutupModalKonfirmasi();
+      switchView('view-home');
+    }
+
+    // ================= FITUR PASSWORD REKAP =================
+    function bukaModalPasswordRekap() {
+      document.getElementById("passwordRekapInput").value = "";
+      document.getElementById("errorPasswordText").style.display = "none";
+      document.getElementById("modalPasswordRekap").style.display = "flex";
+      setTimeout(() => document.getElementById("passwordRekapInput").focus(), 100);
+    }
+
+    function tutupModalPasswordRekap() {
+      document.getElementById("modalPasswordRekap").style.display = "none";
+    }
+
+    function verifikasiPasswordRekap(e) {
+      if(e) e.preventDefault();
+      const inputPass = document.getElementById("passwordRekapInput").value;
+      const errorEl = document.getElementById("errorPasswordText");
+
+      if (inputPass === "pppp") {
+        tutupModalPasswordRekap();
+        switchView('view-recap');
+      } else {
+        errorEl.style.display = "block";
+        document.getElementById("passwordRekapInput").focus();
+      }
+    }
+
+    // ================= DASHBOARD REKAP DATA =================
+    function loadDataRekap() {
+      const container = document.getElementById("rekapList");
+      container.innerHTML = '<div style="text-align: center; color: var(--text-p); font-size: 13px; padding: 20px;"><span class="spinner" style="border-top-color: #ec4899;"></span> Memuat data rekap...</div>';
+
+      fetch(API_URL + "?action=rekap")
+        .then(res => res.json())
+        .then(data => {
+          rawRekapData = Array.isArray(data) ? data : [];
+          populateKelasFilter(rawRekapData);
+          filterDataRekap();
+        })
+        .catch(err => {
+          container.innerHTML = '<div style="text-align: center; color: #ef4444; font-size: 13px; padding: 20px;">Gagal memuat data rekap. Cek koneksi internet.</div>';
+        });
+    }
+
+    // CUSTOM GLASS MODAL PICKER KELAS
+    function bukaModalPilihKelas() {
+      document.getElementById("modalPilihKelas").style.display = "flex";
+    }
+
+    function tutupModalPilihKelas() {
+      document.getElementById("modalPilihKelas").style.display = "none";
+    }
+
+    function populateKelasFilter(data) {
+      const container = document.getElementById("kelasOptionContainer");
+      container.innerHTML = '';
+      
+      const kelasList = [...new Set(data.map(item => item.kelas))].filter(Boolean).sort();
+      
+      // Option Semua Kelas
+      const itemAll = document.createElement("div");
+      itemAll.className = `kelas-option-item ${selectedKelasFilter === "" ? "active" : ""}`;
+      itemAll.innerHTML = `<span>Semua Kelas</span> ${selectedKelasFilter === "" ? "✓" : ""}`;
+      itemAll.onclick = () => pilihKelasFilter("");
+      container.appendChild(itemAll);
+
+      kelasList.forEach(k => {
+        const item = document.createElement("div");
+        item.className = `kelas-option-item ${selectedKelasFilter === k ? "active" : ""}`;
+        item.innerHTML = `<span>Kelas ${k}</span> ${selectedKelasFilter === k ? "✓" : ""}`;
+        item.onclick = () => pilihKelasFilter(k);
+        container.appendChild(item);
+      });
+    }
+
+    function pilihKelasFilter(val) {
+      selectedKelasFilter = val;
+      document.getElementById("selectedKelasText").innerText = val === "" ? "Semua Kelas" : `Kelas ${val}`;
+      tutupModalPilihKelas();
+      populateKelasFilter(rawRekapData);
+      filterDataRekap();
+    }
+
+    function renderRekapDashboard(data) {
+      const container = document.getElementById("rekapList");
+      const statToday = document.getElementById("statToday");
+      const statTotal = document.getElementById("statTotal");
+
+      // Menghitung tanggal hari ini secara lokal
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const todayStr = `${yyyy}-${mm}-${dd}`;
+
+      const countToday = rawRekapData.filter(d => (d.tanggal || "").toString().startsWith(todayStr)).length;
+
+      statToday.innerText = countToday;
+      statTotal.innerText = rawRekapData.length;
+
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-p); font-size: 13px; padding: 20px;">Belum ada data rekap yang sesuai.</div>';
+        return;
+      }
+
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "rekap-card";
+        
+        // Pengecekan aman untuk nilai validasi
+        const validasiStatus = (item.validasi || "Valid").toString();
+        const isBentrok = validasiStatus.toLowerCase() === "bentrok";
+        const badgeClass = isBentrok ? "badge-bentrok" : "badge-valid";
+
+        div.innerHTML = `
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 13px; font-weight: 700; color: var(--text-judul);">${item.nama || "-"}</span>
+            <span style="font-size: 11px; color: var(--text-p); font-weight: 600;">Kelas ${item.kelas || "-"} • ${item.tanggal || "-"}</span>
+          </div>
+          <span class="rekap-badge ${badgeClass}">${validasiStatus}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function filterDataRekap() {
+      const searchVal = (document.getElementById("searchRekapNama").value || "").toLowerCase().trim();
+
+      const filtered = rawRekapData.filter(item => {
+        const matchKelas = selectedKelasFilter === "" || (item.kelas || "") === selectedKelasFilter;
+        const matchNama = (item.nama || "").toLowerCase().includes(searchVal);
+        return matchKelas && matchNama;
+      });
+
+      renderRekapDashboard(filtered);
+    }
+
+    function bukaGoogleSheetsFull() {
+      window.open(SPREADSHEET_FULL_URL, '_blank');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -450,7 +756,7 @@
 
       fetch(API_URL)
         .then(res => res.json())
-        .then(data => { masterDataSiswa = data; })
+        .then(data => { masterDataSiswa = Array.isArray(data) ? data : []; })
         .catch(err => { console.log("Gagal load data API:", err); });
 
       document.querySelectorAll('.modal').forEach(m => {
@@ -460,7 +766,7 @@
       });
     });
 
-    // Live Search
+    // Live Search Form Absen
     const searchInput = document.getElementById("searchInput");
     const searchResults = document.getElementById("searchResults");
 
@@ -474,7 +780,7 @@
       }
 
       const filtered = masterDataSiswa.filter(item => 
-        item.nama.toLowerCase().includes(query) || item.kelas.toLowerCase().includes(query)
+        (item.nama || "").toLowerCase().includes(query) || (item.kelas || "").toLowerCase().includes(query)
       ).slice(0, 8);
 
       if (filtered.length > 0) {
@@ -491,9 +797,7 @@
       }
     });
 
-    // Tambah Siswi ke Antrean
     function tambahKeAntrean(item) {
-      // Cek apakah sudah ada di antrean
       const ada = antreanSiswi.some(s => s.nama === item.nama && s.kelas === item.kelas);
       if (ada) {
         alert(`${item.nama} (${item.kelas}) sudah ada di dalam antrean!`);
@@ -507,13 +811,11 @@
       searchInput.focus();
     }
 
-    // Hapus dari Antrean
     function hapusDariAntrean(index) {
       antreanSiswi.splice(index, 1);
       renderAntrean();
     }
 
-    // Render Tampilan List Antrean
     function renderAntrean() {
       const container = document.getElementById("queueContainer");
       const listEl = document.getElementById("queueList");
@@ -547,7 +849,6 @@
       }
     }
 
-    // Kirim Semua Data Antrean
     function kirimDataHaid() {
       if (antreanSiswi.length === 0) return;
       const btn = document.getElementById('btnSubmit');
